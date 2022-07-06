@@ -27,7 +27,7 @@ public class JdbcAccountDao implements AccountDao {
 
     @Override
     public Account getAccountById(int id){
-        String query = "SELECT * FROM accounts WHERE account_id = ?";
+        String query = "SELECT * FROM account WHERE account_id = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(query, id);
         if( results.next()){
             return mapRowToAccount(results);
@@ -38,7 +38,7 @@ public class JdbcAccountDao implements AccountDao {
     @Override
     public List<Account> getAllAccounts(){
         List<Account> accounts = new ArrayList<Account>();
-        String query = "SELECT * FROM accounts";
+        String query = "SELECT * FROM account";
         SqlRowSet results = jdbcTemplate.queryForRowSet(query);
         while(results.next()){
             Account accountResults = mapRowToAccount(results);
@@ -48,12 +48,41 @@ public class JdbcAccountDao implements AccountDao {
     }
     @Override
     public Account getAccountByUserId(int id){
-        String query = "SELECT * FROM accounts WHERE user_id = ?";
+        String query = "SELECT * FROM account WHERE user_id = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(query, id);
         if( results.next()){
             return mapRowToAccount(results);
         }
         return null;
+    }
+
+    @Override
+    public BigDecimal addBalance(int id, BigDecimal amount){
+        String query = "UPDATE account SET balance = (balance + ?) WHERE user_id = ?";
+        jdbcTemplate.update(query, amount, id);
+        return getAccountBalance((int)id);
+
+    }
+
+    @Override
+    public BigDecimal subtractBalance(int id, BigDecimal amount) {
+        if (checkValidBalance((int) id, amount)) {
+            String query = "UPDATE account SET balance = (balance - ?) WHERE user_id = ?";
+            jdbcTemplate.update(query, amount, id);
+        }else{
+            System.out.println("Not enough money in your account.");
+        }
+
+        return getAccountBalance((int)id);
+
+    }
+
+    @Override
+    public boolean checkValidBalance(int id, BigDecimal amount){
+        if(amount.compareTo(getAccountBalance((int)id)) >= 0){
+            return false;
+        }
+        return true;
     }
 
 

@@ -14,4 +14,10 @@ public interface AccountDao {
 
     public Account getAccountByUserId(int id);
 
+    public BigDecimal addBalance(int id, BigDecimal amount);
+
+    public BigDecimal subtractBalance(int id, BigDecimal amount);
+
+    public boolean checkValidBalance(int id, BigDecimal amount);
+
 }
