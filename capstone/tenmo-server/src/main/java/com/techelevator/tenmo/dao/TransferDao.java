@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface TransferDao {
     public List<Transfer> getAllTransfers();
-    public Transfer getTransferById(int id);
-    public List<Transfer> getAllTransfersByAccountId(int id);
-    public List<Transfer> getAllTransfersByFromId(int id);
-    public List<Transfer> getAllTransfersByToId(int id);
+    public Transfer getTransferById(long id);
+    public List<Transfer> getAllTransfersByAccountId(long id);
+    public List<Transfer> getAllTransfersByFromId(long id);
+    public List<Transfer> getAllTransfersByToId(long id);
 
 }
