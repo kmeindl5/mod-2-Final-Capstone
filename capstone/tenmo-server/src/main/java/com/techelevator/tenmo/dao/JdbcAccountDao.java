@@ -4,6 +4,7 @@ import com.techelevator.tenmo.model.Account;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -20,19 +21,22 @@ public class JdbcAccountDao implements AccountDao {
 
     }
     @Override
-    public BigDecimal getAccountBalance(int id){
+    public BigDecimal getAccountBalance( long id){
         Account account = getAccountById(id);
         return account.getBalance();
     }
 
     @Override
-    public Account getAccountById(int id){
+    public Account getAccountById(long id){
         String query = "SELECT * FROM account WHERE account_id = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(query, id);
         if( results.next()){
             return mapRowToAccount(results);
+        }else{
+            System.out.println("Account not found");
+            return null;
         }
-        return null;
+
     }
 
     @Override
@@ -47,38 +51,41 @@ public class JdbcAccountDao implements AccountDao {
         return accounts;
     }
     @Override
-    public Account getAccountByUserId(int id){
+    public Account getAccountByUserId(long id){
         String query = "SELECT * FROM account WHERE user_id = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(query, id);
         if( results.next()){
             return mapRowToAccount(results);
+        }else{
+            System.out.println("Account not found");
+            return null;
         }
-        return null;
+
     }
 
     @Override
-    public BigDecimal addBalance(int id, BigDecimal amount){
+    public BigDecimal addBalance(long id, BigDecimal amount){
         String query = "UPDATE account SET balance = (balance + ?) WHERE user_id = ?";
         jdbcTemplate.update(query, amount, id);
-        return getAccountBalance((int)id);
+        return getAccountBalance((long)id);
 
     }
 
     @Override
-    public BigDecimal subtractBalance(int id, BigDecimal amount) {
-        if (checkValidBalance((int) id, amount)) {
+    public BigDecimal subtractBalance(long id, BigDecimal amount) {
+        if (checkValidBalance((long) id, amount)) {
             String query = "UPDATE account SET balance = (balance - ?) WHERE user_id = ?";
             jdbcTemplate.update(query, amount, id);
         }else{
             System.out.println("Not enough money in your account.");
         }
 
-        return getAccountBalance((int)id);
+        return getAccountBalance((long)id);
 
     }
 
     @Override
-    public boolean checkValidBalance(int id, BigDecimal amount){
+    public boolean checkValidBalance(long id, BigDecimal amount){
         if(amount.compareTo(getAccountBalance((int)id)) >= 0){
             return false;
         }
@@ -88,9 +95,9 @@ public class JdbcAccountDao implements AccountDao {
 
     private Account mapRowToAccount(SqlRowSet result ){
         Account account = new Account();
-        account.setAccountId(result.getInt("account_id"));
+        account.setAccountId(result.getLong("account_id"));
         account.setBalance(result.getBigDecimal("balance"));
-        account.setUserId(result.getInt("user_id"));
+        account.setUserId(result.getLong("user_id"));
         return account;
     }
 }

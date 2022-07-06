@@ -30,4 +30,8 @@ public class Account {
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
+    @Override
+    public String toString(){
+        return Long.toString(userId) + " " + balance;
+    }
 }
