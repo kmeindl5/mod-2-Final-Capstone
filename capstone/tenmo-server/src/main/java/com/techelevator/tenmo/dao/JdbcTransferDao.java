@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class JdbcTransferDao implements TransferDao{
 
     }
 
-    private static final String SQL_SELECT_TRANSFER = "SELECT t.transfer_id, tt.transfer_type_des, ts.transfer_status_desc, t.amount, " +
+    private static final String SQL_SELECT_TRANSFER = "SELECT t.transfer_id, tt.transfer_type_desc, ts.transfer_status_desc, t.amount, " +
             "aFrom.account_id as fromAcct, aFrom.user_id as fromUser, aFrom.balance as fromBal, " +
             "aTo.account_id as toAcct, aTo.user_id as toUser, aTo.balance as toBal " +
             "FROM transfer t " +
@@ -91,6 +92,13 @@ public class JdbcTransferDao implements TransferDao{
     {
         throw new RuntimeException(("Something went wrong while getting an id for the new transfer"));
     }
+    }
+    @Override
+    public Transfer sendTransfer(long from, long to, BigDecimal amount) {
+        String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (2, 2, ?, ?, ?)";
+        jdbcTemplate.update(sql, from, to, amount);
+        Transfer transfer = new Transfer();
+        return transfer;
     }
 
 

@@ -45,16 +45,22 @@ public class AccountController {
         return account;
     }
 
+   /* @RequestMapping (value = "account/{id}", method = RequestMethod.GET)
+    public Account getAccountByAccountId(@PathVariable long id){
+        Account account = accountDao.getAccountById(id);
+        return account;
+    }*/
+
     @RequestMapping(value = "/balance", method = RequestMethod.GET)
     public BigDecimal getBalance(Principal principal) throws UsernameNotFoundException {
         Long userId = getCurrentUserId (principal);
         return accountDao.getAccountByUserId(userId).getBalance();
     }
 
-    @RequestMapping(value = "/transfers", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/transfers", method = RequestMethod.GET)
     public List<Transfer> getTransfers(Principal principal) {
         return transferDao .getTransferTypeId(getCurrentUserId(principal));
-    }
+    }*/
 
     private long getCurrentUserId(Principal principal){
         return userDao.findByUsername(principal.getName()).getId();

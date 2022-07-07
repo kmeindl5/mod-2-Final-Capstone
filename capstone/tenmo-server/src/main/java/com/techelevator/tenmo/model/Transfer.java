@@ -66,4 +66,5 @@ public class Transfer {
     public void setTransferType(long transferType) {
         this.transferType = transferType;
     }
+
 }
