@@ -8,6 +8,7 @@ public class Transfer {
     private long transferStatusId;
     private long accountFrom;
     private long accountTo;
+    private long transferType;
     private BigDecimal amount;
 
     public long getTransferId() {
@@ -56,5 +57,13 @@ public class Transfer {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public long getTransferType() {
+        return transferType;
+    }
+
+    public void setTransferType(long transferType) {
+        this.transferType = transferType;
     }
 }
