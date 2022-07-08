@@ -21,6 +21,7 @@ private Account account;
 
     private static final String API_BASE_URL = "http://localhost:8080/";
     private final RestTemplate restTemplate = new RestTemplate();
+
     public Transfer createTransfer(Transfer newTransfer){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -37,16 +38,17 @@ private Account account;
         Transfer newTransfer = null;
         while (newTransfer== null) {
             System.out.println("--------------------------------------------");
-            System.out.println("Enter reservation data as a comma separated list containing:");
-            System.out.println("Hotel ID, Full Name, Checkin Date, Checkout Date, Number of Guests");
+            System.out.println("Enter transfer data as a comma separated list containing:");
+            System.out.println("Test");
             if (existingTransfer != null) {
                 System.out.println(existingTransfer);
             } else {
-                System.out.println("Example: 1, John Smith, 10/10/2020, 10/14/2020, 2");
+                System.out.println("Teesting 12");
             }
             System.out.println("--------------------------------------------");
             System.out.println();
             newTransfer = makeTransfer(scanner.nextLine());
+
             if (newTransfer == null) {
                 System.out.println("Invalid entry. Please try again.");
             }
@@ -56,7 +58,7 @@ private Account account;
         }
         return newTransfer;
     }
-    private Transfer makeTransfer() {
+    private Transfer makeTransfer(String makeTran) {
         Transfer transfer = new Transfer();
         transfer = restTemplate.exchange(API_BASE_URL + "transfer", HttpMethod.POST, makeTransferEntity(transfer), Transfer.class ).getBody();
         try {

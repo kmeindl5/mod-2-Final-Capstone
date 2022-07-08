@@ -3,11 +3,15 @@ package com.techelevator.tenmo;
 import com.techelevator.tenmo.model.*;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
+
 import com.techelevator.tenmo.services.TransferService;
+import com.techelevator.tenmo.services.UserService;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -21,12 +25,14 @@ public class App {
 
     private final ConsoleService consoleService = new ConsoleService();
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
+    private final TransferService transferService = new TransferService();
+    private final UserService userService = new UserService();
 
     private AuthenticatedUser currentUser;
     private RestTemplate restTemplate = new RestTemplate();
     private Account account;
     private Transfer transfer;
-    private final TransferService transferService = new TransferService();
+
 
     public static void main(String[] args) {
         App app = new App();
@@ -122,24 +128,36 @@ public class App {
     }
 
     private void sendBucks() {
+        Transfer transfer = new Transfer();
+        transfer.setAccountFrom(currentUser.getUser().getId());
 
-        try {
+        System.out.println("Select who you would like to send money to from below.");
+        String user = consoleService.promptForString(String.valueOf(userService.listUsers()));
+
+        //System.out.println(consoleService.promptForBigDecimal("Please enter a decimal number."));
+        transfer.setAccountTo(transfer.getAccountTo());
+        transfer.setAmount(consoleService.promptForBigDecimal("Please enter a decimal number. "));
+        Transfer transferResult = transferService.promptForTransferData(transfer);
+        if(transferResult == null){
+            System.out.println("try Again");
+            consoleService.promptForString(String.valueOf(userService.listUsers()));
+        }
+        return;
+
+
+        /*try {
             User user = currentUser.getUser();
-            Transfer transferEnteredByUser =
-            Transfer transfer = transferService.createTransfer()
-            ResponseEntity<Account[]> responseEntity = restTemplate.getForObject(API_BASE_URL + "tenmo_user/" +  account.getAccountId(), Account.class);
+            ResponseEntity<User[]> responseEntity = restTemplate.getForEntity(API_BASE_URL + "tenmo_user/" + user.getId(), User[].class);
             List<User> users = Arrays.asList(responseEntity.getBody());
             long userId = requestUserId(users);
-            if (userId == 0) {
-                System.out.println("Exiting User Selection");
-                return;
-            }
+
+            System.out.println("Enter number");
+            return;
 
             BigDecimal money = requestMoneyToSend(userId);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-
 
             Transfer entityTransfer = new Transfer();
             if (money.compareTo(restTemplate.getForObject(API_BASE_URL + "accounts/" + user.getId(), Account.class).getBalance()) >= 0) {
@@ -153,7 +171,7 @@ public class App {
         } catch (Exception e) {
             System.out.println("No clue");
 
-        }
+        }*/
 
     }
 
@@ -184,7 +202,7 @@ public class App {
 
     private BigDecimal requestMoneyToSend(long userId) {
         BigDecimal money = consoleService.promptForBigDecimal("Enter number");
-        while (money.compareTo(accountCl.getBalance()) <= 0) {
+        while (money.compareTo(account.getBalance()) <= 0) {
             System.out.println("Unable to send negative amount of money.");
         }
         return money;
