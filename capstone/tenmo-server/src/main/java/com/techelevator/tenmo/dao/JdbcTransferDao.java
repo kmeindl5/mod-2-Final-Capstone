@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +69,9 @@ public class JdbcTransferDao implements TransferDao{
 
 
     public Transfer createTransfer(Transfer transfer){
-        String query = "INSERT INTO transfer (transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount)"
-                + "VALUES (?,?,?,?,?,?)";
+        String query = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount)"
+                + "VALUES (?,?,?,?,?)";
+
 
         Long newTransferId = getNextTransferId();
         Long transferTypeId = transfer.getTransferTypeId();
@@ -100,6 +100,7 @@ public class JdbcTransferDao implements TransferDao{
         Transfer transfer = new Transfer();
         return transfer;
     }
+
 
 
     private Transfer mapRowToTransfer(SqlRowSet result ){

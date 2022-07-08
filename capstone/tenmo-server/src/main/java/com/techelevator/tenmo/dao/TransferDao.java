@@ -10,5 +10,10 @@ public interface TransferDao {
     public Transfer getTransferById(long id);
     public  List<Transfer> getTransferTypeId();
     Transfer sendTransfer(long userFrom, long UserTo, BigDecimal amount);
+
+
+
+
+
 }
 

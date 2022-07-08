@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 @Component
@@ -61,6 +62,7 @@ public class TransferController {
         List<Transfer> transfers = transferDao.getAllTransfersByToId(id);
         return transfers;
     }*/
+
 
 
 

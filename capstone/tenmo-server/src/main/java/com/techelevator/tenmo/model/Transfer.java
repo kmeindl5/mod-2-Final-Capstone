@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.model;
 
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 
 public class Transfer {
@@ -9,6 +10,7 @@ public class Transfer {
     private long accountFrom;
     private long accountTo;
     private long transferType;
+
     private BigDecimal amount;
 
     public long getTransferId() {
@@ -66,5 +68,6 @@ public class Transfer {
     public void setTransferType(long transferType) {
         this.transferType = transferType;
     }
+
 
 }

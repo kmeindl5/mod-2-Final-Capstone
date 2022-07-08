@@ -18,6 +18,8 @@ public interface AccountDao {
 
     public BigDecimal subtractBalance(long id, BigDecimal amount);
 
+    public BigDecimal getBalance();
+
     public boolean checkValidBalance(long id, BigDecimal amount);
 
 }
