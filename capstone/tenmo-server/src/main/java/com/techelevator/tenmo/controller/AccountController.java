@@ -8,6 +8,7 @@ import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +19,7 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 import java.util.stream.BaseStream;
-
+@Component
 @RestController
 
 public class AccountController {
@@ -45,11 +46,6 @@ public class AccountController {
         return account;
     }
 
-   /* @RequestMapping (value = "account/{id}", method = RequestMethod.GET)
-    public Account getAccountByAccountId(@PathVariable long id){
-        Account account = accountDao.getAccountById(id);
-        return account;
-    }*/
 
     @RequestMapping(value = "/balance", method = RequestMethod.GET)
     public BigDecimal getBalance(Principal principal) throws UsernameNotFoundException {
